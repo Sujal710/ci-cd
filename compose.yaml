@@ -1,0 +1,26 @@
+# docker-compose.yml
+version: "3.9"
+services:
+  api:
+    build: .
+    ports: ["8000:8000"]
+    environment:
+      DATABASE_URL: postgresql+asyncpg://ml:secret@db:5432/mldb
+    depends_on:
+      db:
+        condition: service_healthy   # wait for Postgres to be ready
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ml
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: mldb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ml"]
+      interval: 5s
+      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+volumes:
+  pgdata:
