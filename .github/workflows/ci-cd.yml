@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [main]
 env:
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: sujal710/ci-cd
   REGISTRY: ghcr.io
 jobs:
   test:
@@ -97,8 +97,8 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            sudo docker pull ghcr.io/${{ github.repository }}:latest
+            sudo docker pull ghcr.io/sujal710/ci-cd:latest
             sudo docker stop ci-cd-app || true
             sudo docker rm ci-cd-app || true
-            sudo docker run -d --name ci-cd-app -p 8000:8000 --restart unless-stopped ghcr.io/${{ github.repository }}:latest
+            sudo docker run -d --name ci-cd-app -p 8000:8000 --restart unless-stopped ghcr.io/sujal710/ci-cd:latest
             sudo docker image prune -f
