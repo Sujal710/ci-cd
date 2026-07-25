@@ -100,5 +100,5 @@ jobs:
             sudo docker pull ghcr.io/sujal710/ci-cd:latest
             sudo docker stop ci-cd-app || true
             sudo docker rm ci-cd-app || true
-            sudo docker run -d --name ci-cd-app -p 8000:8000 --restart unless-stopped ghcr.io/sujal710/ci-cd:latest
+            sudo docker run -d --name ci-cd-app -p 8000:8080 --restart unless-stopped ghcr.io/sujal710/ci-cd:latest
             sudo docker image prune -f
